@@ -1140,9 +1140,9 @@ export default function DurandeWebsite() {
               <Reveal delay={300}>
                 <div className="mt-10 space-y-3">
                   {[
-                    { icon: Mail, label: "hello@durande.com" },
-                    { icon: Phone, label: "+44 (0) 20 0000 0000" },
-                    { icon: MapPin, label: "London, United Kingdom" },
+                    { icon: Mail, label: "info@durande.com" },
+                    { icon: Phone, label: "+44 (0) 20 0010011" },
+                    { icon: MapPin, label: "85 Station Road, North Harrow,Harrow, HA2 7SW United Kingdom" },
                   ].map((c) => {
                     const Icon = c.icon;
                     return (
