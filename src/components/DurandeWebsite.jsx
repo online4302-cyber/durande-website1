@@ -114,7 +114,7 @@ const StatusDot = ({ color = "emerald" }) => (
 const PrimaryButton = ({ children, onClick, className = "" }) => (
   <button
     onClick={onClick}
-    className={`group inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-[13px] font-medium text-white shadow-[0_10px_40px_-15px_rgba(37,99,235,0.7)] transition-all duration-300 hover:bg-blue-700`}
+    className={`group inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-[13px] font-medium text-white shadow-[0_10px_40px_-15px_rgba(37,99,235,0.7)] transition-all duration-300 hover:translate-y-[-2px]`}
   >
     {children}
     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -367,7 +367,7 @@ export default function DurandeWebsite() {
             </div>
             <button
               onClick={() => scrollTo("contact")}
-              className="group inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-[13px] font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-400/50 hover:bg-blue-700"
+              className="group inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-[13px] font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-400/50 hover:translate-y-[-2px] transition-transform"
             >
               Get in touch
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -412,15 +412,15 @@ export default function DurandeWebsite() {
           =================================================================== */}
       <section
         id="hero"
-        className="relative min-h-screen w-full flex items-center justify-center overflow-hidden px-6 py-20"
+        className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 py-20"
       >
-        <GridBg />
+        <GridBg opacity={0.08} />
         <Glow className="absolute -top-40 -right-40 h-80 w-80 bg-blue-500/20" />
         <Noise />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
+        <div className="relative z-10 mx-auto max-w-4xl text-center">
           <Reveal delay={0}>
-            <h1 className="text-5xl lg:text-7xl font-bold tracking-tight mb-6">
+            <h1 className="mb-6 text-5xl font-bold tracking-tight lg:text-7xl">
               <span className="text-white">Bespoke </span>
               <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
                 Software Solutions
@@ -431,13 +431,13 @@ export default function DurandeWebsite() {
           </Reveal>
 
           <Reveal delay={100}>
-            <p className="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto">
+            <p className="mb-8 max-w-2xl mx-auto text-xl text-zinc-400">
               From web portals to business automation, we craft custom software that solves real problems and scales with you.
             </p>
           </Reveal>
 
           <Reveal delay={200}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col gap-4 justify-center sm:flex-row">
               <PrimaryButton onClick={() => scrollTo("services")}>
                 Explore Services
               </PrimaryButton>
@@ -452,7 +452,7 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           SERVICES
           =================================================================== */}
-      <section id="services" className="relative py-20 lg:py-32 px-6">
+      <section id="services" className="relative py-20 px-6 lg:py-32">
         <GridBgLight opacity={0.3} />
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0}>
@@ -460,19 +460,19 @@ export default function DurandeWebsite() {
           </Reveal>
 
           <Reveal delay={50} className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">What We Offer</h2>
-            <p className="text-zinc-400 text-lg max-w-2xl">
+            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">What We Offer</h2>
+            <p className="max-w-2xl text-lg text-zinc-400">
               Comprehensive software solutions tailored to your business needs
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {services.map((service, idx) => (
               <Reveal key={idx} delay={idx * 50}>
-                <div className="group relative p-6 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:border-blue-500/30 hover:bg-white/[0.04] transition-all duration-300">
-                  <service.icon className="w-8 h-8 text-blue-400 mb-4 group-hover:text-blue-300 transition-colors" />
-                  <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
-                  <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">{service.desc}</p>
+                <div className="group relative rounded-lg border border-white/[0.08] bg-white/[0.02] p-6 transition-all duration-300 hover:border-blue-500/30 hover:bg-white/[0.04]">
+                  <service.icon className="mb-4 h-8 w-8 text-blue-400 transition-colors group-hover:text-blue-300" />
+                  <h3 className="mb-2 text-lg font-semibold">{service.title}</h3>
+                  <p className="text-sm text-zinc-400 transition-colors group-hover:text-zinc-300">{service.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -483,22 +483,22 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           PROCESS
           =================================================================== */}
-      <section id="process" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+      <section id="process" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0}>
             <SectionLabel number="02">Process</SectionLabel>
           </Reveal>
 
           <Reveal delay={50} className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold">How We Work</h2>
+            <h2 className="text-4xl font-bold lg:text-5xl">How We Work</h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, idx) => (
               <Reveal key={idx} delay={idx * 50}>
                 <div className="relative">
-                  <div className="text-4xl font-bold text-blue-400/20 mb-2">{step.n}</div>
-                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+                  <div className="mb-2 text-4xl font-bold text-blue-400/20">{step.n}</div>
+                  <h3 className="mb-3 text-xl font-semibold">{step.title}</h3>
                   <p className="text-zinc-400">{step.desc}</p>
                 </div>
               </Reveal>
@@ -510,19 +510,19 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           WHY US
           =================================================================== */}
-      <section className="relative py-20 lg:py-32 px-6">
+      <section className="relative py-20 px-6 lg:py-32">
         <GridBgLight opacity={0.3} />
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0} className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold">Why Choose Us</h2>
+            <h2 className="text-4xl font-bold lg:text-5xl">Why Choose Us</h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {whyUs.map((item, idx) => (
               <Reveal key={idx} delay={idx * 50}>
-                <div className="p-6 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:border-blue-500/30 transition-colors">
-                  <item.icon className="w-6 h-6 text-blue-400 mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                <div className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-6 transition-colors hover:border-blue-500/30">
+                  <item.icon className="mb-4 h-6 w-6 text-blue-400" />
+                  <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
                   <p className="text-sm text-zinc-400">{item.desc}</p>
                 </div>
               </Reveal>
@@ -534,23 +534,23 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           SOLUTIONS
           =================================================================== */}
-      <section id="solutions" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+      <section id="solutions" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0}>
             <SectionLabel number="03">Solutions</SectionLabel>
           </Reveal>
 
           <Reveal delay={50} className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold">Pre-Built Solutions</h2>
+            <h2 className="text-4xl font-bold lg:text-5xl">Pre-Built Solutions</h2>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {solutions.map((solution, idx) => (
               <Reveal key={idx} delay={idx * 50}>
-                <div className="group p-6 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:border-blue-500/30 hover:bg-white/[0.04] transition-all">
-                  <solution.icon className="w-8 h-8 text-blue-400 mb-4 group-hover:text-blue-300 transition-colors" />
-                  <h3 className="text-lg font-semibold mb-2">{solution.name}</h3>
-                  <p className="text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors">{solution.desc}</p>
+                <div className="group rounded-lg border border-white/[0.08] bg-white/[0.02] p-6 transition-all hover:border-blue-500/30 hover:bg-white/[0.04]">
+                  <solution.icon className="mb-4 h-8 w-8 text-blue-400 transition-colors group-hover:text-blue-300" />
+                  <h3 className="mb-2 text-lg font-semibold">{solution.name}</h3>
+                  <p className="text-sm text-zinc-400 transition-colors group-hover:text-zinc-300">{solution.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -561,18 +561,18 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           INDUSTRIES
           =================================================================== */}
-      <section className="relative py-20 lg:py-32 px-6">
+      <section className="relative py-20 px-6 lg:py-32">
         <GridBgLight opacity={0.3} />
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0} className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold">Industries We Serve</h2>
+            <h2 className="text-4xl font-bold lg:text-5xl">Industries We Serve</h2>
           </Reveal>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
             {industries.map((industry, idx) => (
               <Reveal key={idx} delay={idx * 30}>
-                <div className="group flex flex-col items-center gap-3 p-4 rounded-lg border border-white/[0.08] bg-white/[0.02] hover:border-blue-500/30 hover:bg-white/[0.04] transition-all text-center">
-                  <industry.icon className="w-6 h-6 text-blue-400 group-hover:text-blue-300 transition-colors" />
+                <div className="group flex flex-col items-center gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] p-4 text-center transition-all hover:border-blue-500/30 hover:bg-white/[0.04]">
+                  <industry.icon className="h-6 w-6 text-blue-400 transition-colors group-hover:text-blue-300" />
                   <span className="text-sm text-zinc-300">{industry.label}</span>
                 </div>
               </Reveal>
@@ -584,39 +584,39 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           PRICING
           =================================================================== */}
-      <section id="pricing" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+      <section id="pricing" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0}>
             <SectionLabel number="04">Pricing</SectionLabel>
           </Reveal>
 
           <Reveal delay={50} className="mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">Simple, Transparent Pricing</h2>
-            <p className="text-zinc-400 text-lg max-w-2xl">
+            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Simple, Transparent Pricing</h2>
+            <p className="max-w-2xl text-lg text-zinc-400">
               Choose a package that fits your needs. All packages include ongoing support.
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             {pricing.map((plan, idx) => (
               <Reveal key={idx} delay={idx * 50}>
                 <div
-                  className={`relative p-6 rounded-lg border transition-all ${
+                  className={`relative rounded-lg border p-6 transition-all ${
                     plan.featured
                       ? "border-blue-500/50 bg-blue-500/[0.05] ring-1 ring-blue-500/20"
                       : "border-white/[0.08] bg-white/[0.02]"
                   }`}
                 >
-                  <h3 className="text-lg font-semibold mb-2">{plan.name}</h3>
-                  <p className="text-zinc-400 text-sm mb-4">{plan.tagline}</p>
+                  <h3 className="mb-2 text-lg font-semibold">{plan.name}</h3>
+                  <p className="mb-4 text-sm text-zinc-400">{plan.tagline}</p>
                   <div className="mb-6">
                     <span className="text-3xl font-bold text-blue-400">${plan.price}</span>
-                    <span className="text-zinc-500 text-sm ml-2">one-time</span>
+                    <span className="ml-2 text-sm text-zinc-500">one-time</span>
                   </div>
-                  <ul className="space-y-2 mb-6">
+                  <ul className="mb-6 space-y-2">
                     {plan.features.map((feature, fidx) => (
                       <li key={fidx} className="flex items-start gap-2 text-sm text-zinc-400">
-                        <Check className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-400" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -637,12 +637,12 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           TECH STACK
           =================================================================== */}
-      <section className="relative py-20 lg:py-32 px-6">
+      <section className="relative py-20 px-6 lg:py-32">
         <GridBgLight opacity={0.3} />
         <div className="relative z-10 mx-auto max-w-7xl">
           <Reveal delay={0} className="mb-12">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">Technology Stack</h2>
-            <p className="text-zinc-400 text-lg">
+            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Technology Stack</h2>
+            <p className="text-lg text-zinc-400">
               We use modern, battle-tested technologies
             </p>
           </Reveal>
@@ -650,7 +650,7 @@ export default function DurandeWebsite() {
           <div className="flex flex-wrap gap-3">
             {stack.map((tech, idx) => (
               <Reveal key={idx} delay={idx * 20}>
-                <div className="px-3 py-1.5 rounded-full border border-white/[0.1] bg-white/[0.02] text-sm text-zinc-300 hover:border-blue-500/30 transition-colors">
+                <div className="rounded-full border border-white/[0.1] bg-white/[0.02] px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:border-blue-500/30">
                   {tech}
                 </div>
               </Reveal>
@@ -660,18 +660,18 @@ export default function DurandeWebsite() {
       </section>
 
       {/* ===================================================================
-          CONTACT  
+          CONTACT
           =================================================================== */}
-      <section id="contact" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+      <section id="contact" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
         <Glow className="absolute -bottom-40 -right-40 h-80 w-80 bg-blue-500/10" />
         <div className="relative z-10 mx-auto max-w-2xl">
-          <Reveal delay={0} className="text-center mb-12">
+          <Reveal delay={0} className="mb-12 text-center">
             <SectionLabel number="05">Contact</SectionLabel>
           </Reveal>
 
-          <Reveal delay={50} className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">Get In Touch</h2>
-            <p className="text-zinc-400 text-lg">
+          <Reveal delay={50} className="mb-12 text-center">
+            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Get In Touch</h2>
+            <p className="text-lg text-zinc-400">
               Leave us a query and our team will contact you to discuss your project.
             </p>
           </Reveal>
@@ -680,7 +680,7 @@ export default function DurandeWebsite() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name */}
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <label className="mb-2 block text-sm font-medium text-zinc-300">
                   Name
                 </label>
                 <input
@@ -689,13 +689,13 @@ export default function DurandeWebsite() {
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="Your name"
                   required
-                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.08] transition-colors"
+                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <label className="mb-2 block text-sm font-medium text-zinc-300">
                   Email
                 </label>
                 <input
@@ -704,19 +704,19 @@ export default function DurandeWebsite() {
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="your@email.com"
                   required
-                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.08] transition-colors"
+                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
                 />
               </div>
 
               {/* Service */}
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <label className="mb-2 block text-sm font-medium text-zinc-300">
                   Service of Interest
                 </label>
                 <select
                   value={form.service}
                   onChange={(e) => setForm({ ...form, service: e.target.value })}
-                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.08] transition-colors"
+                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
                 >
                   <option value="">Select a service</option>
                   <option value="web-app">Web App Development</option>
@@ -732,7 +732,7 @@ export default function DurandeWebsite() {
 
               {/* Message */}
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <label className="mb-2 block text-sm font-medium text-zinc-300">
                   Your Query
                 </label>
                 <textarea
@@ -740,7 +740,7 @@ export default function DurandeWebsite() {
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
                   placeholder="Tell us about your project..."
                   rows={5}
-                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white placeholder-zinc-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.08] transition-colors resize-none"
+                  className="w-full resize-none rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
                 />
               </div>
 
@@ -748,7 +748,7 @@ export default function DurandeWebsite() {
               <button
                 type="submit"
                 disabled={submitted}
-                className="w-full px-6 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {submitted ? "Message Sent! We'll be in touch soon." : "Send Query"}
               </button>
@@ -760,9 +760,9 @@ export default function DurandeWebsite() {
       {/* ===================================================================
           FOOTER
           =================================================================== */}
-      <footer className="relative border-t border-white/[0.05] py-12 px-6">
+      <footer className="relative border-t border-white/[0.05] px-6 py-12">
         <div className="mx-auto max-w-7xl text-center">
-          <Mono className="text-zinc-600 text-sm">
+          <Mono className="text-sm text-zinc-600">
             © 2024 Durande. All rights reserved.
           </Mono>
         </div>
