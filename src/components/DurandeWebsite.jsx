@@ -189,6 +189,7 @@ export default function DurandeWebsite() {
   const [form, setForm] = useState({
     name: "",
     email: "",
+    phone: "",
     service: "",
     message: "",
   });
@@ -222,7 +223,7 @@ export default function DurandeWebsite() {
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setForm({ name: "", email: "", service: "", message: "" });
+      setForm({ name: "", email: "", phone: "", service: "", message: "" });
     }, 3500);
   };
 
@@ -672,7 +673,7 @@ export default function DurandeWebsite() {
           <Reveal delay={50} className="mb-12 text-center">
             <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Get In Touch</h2>
             <p className="text-lg text-zinc-400">
-              Leave us a query and our team will contact you to discuss your project.
+              Leave us a message and we'll get back to you.
             </p>
           </Reveal>
 
@@ -708,6 +709,20 @@ export default function DurandeWebsite() {
                 />
               </div>
 
+              {/* Phone */}
+              <div>
+                <label className="mb-2 block text-sm font-medium text-zinc-300">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  placeholder="Your phone number"
+                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
+                />
+              </div>
+
               {/* Service */}
               <div>
                 <label className="mb-2 block text-sm font-medium text-zinc-300">
@@ -733,7 +748,7 @@ export default function DurandeWebsite() {
               {/* Message */}
               <div>
                 <label className="mb-2 block text-sm font-medium text-zinc-300">
-                  Your Query
+                  Message
                 </label>
                 <textarea
                   value={form.message}
@@ -750,7 +765,7 @@ export default function DurandeWebsite() {
                 disabled={submitted}
                 className="w-full rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {submitted ? "Message Sent! We'll be in touch soon." : "Send Query"}
+                {submitted ? "Message Sent! We'll be in touch soon." : "Send Message"}
               </button>
             </form>
           </Reveal>
