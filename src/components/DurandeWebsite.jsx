@@ -14,7 +14,6 @@ import {
   Menu,
   X,
   Mail,
-  MapPin,
   Building2,
   Home,
   ShoppingBag,
@@ -114,7 +113,7 @@ const StatusDot = ({ color = "emerald" }) => (
 const PrimaryButton = ({ children, onClick, className = "" }) => (
   <button
     onClick={onClick}
-    className={`group inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-[13px] font-medium text-white shadow-[0_10px_40px_-15px_rgba(37,99,235,0.7)] transition-all duration-300[...]`
+    className={`group inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-[13px] font-medium text-white shadow-[0_10px_40px_-15px_rgba(37,99,235,0.7)] transition-all duration-300 hover:bg-blue-700`}
   >
     {children}
     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -175,7 +174,7 @@ const Noise = () => (
     className="pointer-events-none absolute inset-0 opacity-[0.025] mix-blend-overlay"
     style={{
       backgroundImage:
-        "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3[...])",
+        "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='80'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E\")",
     }}
   />
 );
@@ -189,7 +188,6 @@ export default function DurandeWebsite() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    phone: "",
     service: "",
     message: "",
   });
@@ -223,7 +221,7 @@ export default function DurandeWebsite() {
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setForm({ name: "", email: "", phone: "", service: "", message: "" });
+      setForm({ name: "", email: "", service: "", message: "" });
     }, 3500);
   };
 
@@ -294,14 +292,14 @@ export default function DurandeWebsite() {
       name: "Business Web Portal",
       price: "999",
       tagline: "For growing businesses needing a more complete portal system.",
-      features: ["Custom web portal", "User roles and permissions", "Admin dashboard", "Customer/client dashboard", "Database integration", "Forms and document uploads", "Email notifications", "M[...]",
+      features: ["Custom web portal", "User roles and permissions", "Admin dashboard", "Customer/client dashboard", "Database integration", "Forms and document uploads", "Email notifications", "Mobile responsive"],
       featured: true,
     },
     {
       name: "Advanced Portal & Automation",
       price: "1,999",
       tagline: "For businesses needing automation and advanced database features.",
-      features: ["Advanced custom portal", "Full database design", "Automation workflows", "API integrations", "Payment or invoice tracking", "Reports and analytics dashboard", "Email/SMS automat[...]",
+      features: ["Advanced custom portal", "Full database design", "Automation workflows", "API integrations", "Payment or invoice tracking", "Reports and analytics dashboard", "Email/SMS automation"],
       featured: false,
     },
     {
@@ -368,7 +366,7 @@ export default function DurandeWebsite() {
             </div>
             <button
               onClick={() => scrollTo("contact")}
-              className="group inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-[13px] font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-40[...]
+              className="group inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-[13px] font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-400/50 hover:bg-blue-700"
             >
               Get in touch
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -398,7 +396,7 @@ export default function DurandeWebsite() {
               ))}
               <button
                 onClick={() => scrollTo("contact")}
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ri[...]
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-400/50"
               >
                 Get in touch
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -409,6 +407,340 @@ export default function DurandeWebsite() {
       </nav>
 
       {/* ===================================================================
-          HERO  ·  DARK
+          HERO SECTION
           =================================================================== */}
-... (file truncated for brevity, full content uploaded)
+      <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 lg:pt-0">
+        <GridBg opacity={0.08} />
+        <Glow className="absolute -top-40 -right-40 h-80 w-80 bg-blue-500/10" />
+        <Noise />
+        
+        <Reveal delay={0} className="max-w-3xl text-center">
+          <h1 className="text-4xl lg:text-6xl font-bold tracking-tight mb-6">
+            <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
+              Bespoke Software Solutions
+            </span>
+            <br />
+            <span className="text-zinc-100">Built for Your Business</span>
+          </h1>
+        </Reveal>
+
+        <Reveal delay={100} className="max-w-2xl text-center">
+          <p className="text-zinc-400 text-lg mb-8">
+            From web portals to business automation, we craft custom software that solves real problems and scales with you.
+          </p>
+        </Reveal>
+
+        <Reveal delay={200}>
+          <div className="flex gap-4">
+            <PrimaryButton onClick={() => scrollTo("services")}>
+              Explore Services
+            </PrimaryButton>
+            <GhostButton onClick={() => scrollTo("contact")}>
+              Contact Us
+            </GhostButton>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ===================================================================
+          SERVICES SECTION
+          =================================================================== */}
+      <section id="services" className="relative py-20 lg:py-32 px-6">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <SectionLabel number="01">services</SectionLabel>
+          </Reveal>
+
+          <Reveal delay={50} className="mb-16">
+            <h2 className="text-3xl lg:text-5xl font-bold">What We Offer</h2>
+            <p className="text-zinc-400 text-lg mt-4 max-w-2xl">
+              Comprehensive software solutions tailored to your business needs.
+            </p>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {services.map((service, idx) => (
+              <Reveal key={idx} delay={idx * 50} className="group">
+                <div className="relative p-6 rounded-lg border border-white/[0.05] bg-white/[0.02] hover:border-blue-400/30 transition-colors">
+                  <service.icon className="w-8 h-8 text-blue-400 mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
+                  <p className="text-sm text-zinc-400">{service.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          PROCESS SECTION
+          =================================================================== */}
+      <section id="process" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <SectionLabel number="02">process</SectionLabel>
+          </Reveal>
+
+          <Reveal delay={50} className="mb-16">
+            <h2 className="text-3xl lg:text-5xl font-bold">How We Work</h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {steps.map((step, idx) => (
+              <Reveal key={idx} delay={idx * 50}>
+                <div className="relative">
+                  <div className="text-blue-400 text-3xl font-bold mb-4">{step.n}</div>
+                  <h3 className="text-lg font-semibold mb-3">{step.title}</h3>
+                  <p className="text-sm text-zinc-400">{step.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          WHY US SECTION
+          =================================================================== */}
+      <section className="relative py-20 lg:py-32 px-6">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <h2 className="text-3xl lg:text-5xl font-bold">Why Choose Us</h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {whyUs.map((item, idx) => (
+              <Reveal key={idx} delay={idx * 50}>
+                <div className="p-6 rounded-lg border border-white/[0.05] bg-white/[0.02]">
+                  <item.icon className="w-6 h-6 text-blue-400 mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+                  <p className="text-sm text-zinc-400">{item.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          SOLUTIONS SECTION
+          =================================================================== */}
+      <section id="solutions" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <SectionLabel number="03">solutions</SectionLabel>
+          </Reveal>
+
+          <Reveal delay={50} className="mb-16">
+            <h2 className="text-3xl lg:text-5xl font-bold">Pre-Built Solutions</h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {solutions.map((solution, idx) => (
+              <Reveal key={idx} delay={idx * 50}>
+                <div className="p-6 rounded-lg border border-white/[0.05] bg-white/[0.02] hover:border-blue-400/30 transition-colors">
+                  <solution.icon className="w-8 h-8 text-blue-400 mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">{solution.name}</h3>
+                  <p className="text-sm text-zinc-400">{solution.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          INDUSTRIES SECTION
+          =================================================================== */}
+      <section className="relative py-20 lg:py-32 px-6">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <h2 className="text-3xl lg:text-5xl font-bold">Industries We Serve</h2>
+          </Reveal>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            {industries.map((industry, idx) => (
+              <Reveal key={idx} delay={idx * 30}>
+                <div className="flex flex-col items-center gap-2 p-4 rounded-lg border border-white/[0.05] bg-white/[0.02] text-center">
+                  <industry.icon className="w-6 h-6 text-blue-400" />
+                  <span className="text-sm text-zinc-300">{industry.label}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          PRICING SECTION
+          =================================================================== */}
+      <section id="pricing" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <SectionLabel number="04">pricing</SectionLabel>
+          </Reveal>
+
+          <Reveal delay={50} className="mb-16">
+            <h2 className="text-3xl lg:text-5xl font-bold">Simple, Transparent Pricing</h2>
+            <p className="text-zinc-400 text-lg mt-4 max-w-2xl">
+              Choose a package that fits your needs. All packages include ongoing support.
+            </p>
+          </Reveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {pricing.map((plan, idx) => (
+              <Reveal key={idx} delay={idx * 50}>
+                <div className={`relative p-6 rounded-lg border transition-all ${
+                  plan.featured
+                    ? "border-blue-400 bg-blue-400/[0.05]"
+                    : "border-white/[0.05] bg-white/[0.02]"
+                }`}>
+                  <h3 className="text-lg font-semibold mb-2">{plan.name}</h3>
+                  <p className="text-zinc-400 text-sm mb-4">{plan.tagline}</p>
+                  <div className="mb-6">
+                    <span className="text-3xl font-bold text-blue-400">${plan.price}</span>
+                    <span className="text-zinc-400 text-sm ml-2">one-time</span>
+                  </div>
+                  <ul className="space-y-2 mb-6">
+                    {plan.features.map((feature, fidx) => (
+                      <li key={fidx} className="flex items-start gap-2 text-sm text-zinc-400">
+                        <Check className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <PrimaryButton onClick={() => scrollTo("contact")} className="w-full">
+                    Get Started
+                  </PrimaryButton>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          TECH STACK SECTION
+          =================================================================== */}
+      <section className="relative py-20 lg:py-32 px-6">
+        <div className="mx-auto max-w-7xl">
+          <Reveal className="mb-12">
+            <h2 className="text-3xl lg:text-5xl font-bold">Technology Stack</h2>
+            <p className="text-zinc-400 text-lg mt-4">
+              We use modern, battle-tested technologies.
+            </p>
+          </Reveal>
+
+          <div className="flex flex-wrap gap-3">
+            {stack.map((tech, idx) => (
+              <Reveal key={idx} delay={idx * 20}>
+                <div className="px-4 py-2 rounded-full border border-white/[0.05] bg-white/[0.02] text-sm text-zinc-300">
+                  {tech}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          CONTACT SECTION
+          =================================================================== */}
+      <section id="contact" className="relative py-20 lg:py-32 px-6 bg-white/[0.02]">
+        <div className="mx-auto max-w-3xl">
+          <Reveal className="mb-12 text-center">
+            <SectionLabel number="05">contact</SectionLabel>
+          </Reveal>
+
+          <Reveal delay={50} className="mb-8 text-center">
+            <h2 className="text-3xl lg:text-5xl font-bold mb-4">Get In Touch</h2>
+            <p className="text-zinc-400 text-lg">
+              Leave us a query and our team will contact you to discuss your project.
+            </p>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Name Field */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Name</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400/50"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+
+              {/* Email Field */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Email</label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400/50"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+
+              {/* Service Field */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Service of Interest</label>
+                <select
+                  value={form.service}
+                  onChange={(e) => setForm({ ...form, service: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white focus:outline-none focus:border-blue-400/50"
+                >
+                  <option value="">Select a service</option>
+                  <option value="web-app">Web App Development</option>
+                  <option value="portal">Client Portal</option>
+                  <option value="automation">Business Automation</option>
+                  <option value="custom">Custom Software</option>
+                  <option value="website">Website Development</option>
+                  <option value="dashboard">CRM & Dashboards</option>
+                  <option value="integration">API Integration</option>
+                  <option value="hosting">Hosting Consultancy</option>
+                </select>
+              </div>
+
+              {/* Message Field */}
+              <div>
+                <label className="block text-sm font-medium mb-2">Your Query</label>
+                <textarea
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md bg-white/[0.05] border border-white/[0.1] text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400/50 resize-none"
+                  rows="5"
+                  placeholder="Tell us about your project..."
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="w-full px-6 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors"
+              >
+                {submitted ? "Message Sent! We'll be in touch soon." : "Send Query"}
+              </button>
+            </form>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ===================================================================
+          FOOTER
+          =================================================================== */}
+      <footer className="relative border-t border-white/[0.05] bg-white/[0.02] py-12 px-6">
+        <div className="mx-auto max-w-7xl text-center">
+          <Mono className="text-zinc-500 text-sm">
+            © 2024 Durande. All rights reserved.
+          </Mono>
+        </div>
+      </footer>
+    </div>
+  );
+}
