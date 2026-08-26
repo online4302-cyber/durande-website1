@@ -144,7 +144,7 @@ const GridBg = ({ opacity = 0.06 }) => (
     style={{
       opacity,
       backgroundImage:
-        "linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)",
+        "linear-gradient(rgba(59,130,246,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.6) 1px, transparent 1px)",
       backgroundSize: "56px 56px",
       maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
       WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
@@ -162,6 +162,18 @@ const GridBgLight = ({ opacity = 0.5 }) => (
       backgroundSize: "56px 56px",
       maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
       WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+    }}
+  />
+);
+
+/* Site-wide blue grid — fixed behind all content, spans the whole page */
+const GlobalGrid = () => (
+  <div
+    className="pointer-events-none fixed inset-0 z-0"
+    style={{
+      backgroundImage:
+        "linear-gradient(rgba(59,130,246,0.10) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.10) 1px, transparent 1px)",
+      backgroundSize: "56px 56px",
     }}
   />
 );
@@ -323,6 +335,7 @@ export default function DurandeWebsite() {
       className="min-h-screen bg-[#08080a] text-zinc-100 antialiased selection:bg-blue-500/30 selection:text-white"
       style={{ fontFamily: '"Geist", system-ui, sans-serif' }}
     >
+      <GlobalGrid />
       {/* ===================================================================
           NAV
           =================================================================== */}
