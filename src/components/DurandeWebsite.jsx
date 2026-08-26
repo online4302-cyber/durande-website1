@@ -166,14 +166,18 @@ const GridBgLight = ({ opacity = 0.5 }) => (
   />
 );
 
-/* Site-wide blue grid — fixed behind all content, spans the whole page */
+/* Site-wide grid — subtle ambient texture, fades out toward the edges */
 const GlobalGrid = () => (
   <div
     className="pointer-events-none fixed inset-0 z-0"
     style={{
       backgroundImage:
-        "linear-gradient(rgba(59,130,246,0.28) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.10) 1px, transparent 1px)",
-      backgroundSize: "56px 56px",
+        "linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px)",
+      backgroundSize: "64px 64px",
+      maskImage:
+        "radial-gradient(ellipse 110% 85% at 50% 0%, black 10%, transparent 60%)",
+      WebkitMaskImage:
+        "radial-gradient(ellipse 110% 85% at 50% 0%, black 10%, transparent 60%)",
     }}
   />
 );
