@@ -263,19 +263,19 @@ export default function DurandeWebsite() {
   ];
 
   const industries = [
-    { icon: Building2, label: "Property" },
-    { icon: Home, label: "Estate Agents" },
-    { icon: ShoppingBag, label: "Retail" },
+    { icon: Cpu, label: "SaaS" },
+    { icon: Receipt, label: "Fintech" },
+    { icon: ShoppingBag, label: "E-commerce" },
     { icon: Briefcase, label: "Services" },
     { icon: Rocket, label: "Startups" },
-    { icon: Store, label: "Local Business" },
-    { icon: FileSpreadsheet, label: "Admin-Heavy Ops" },
+    { icon: Terminal, label: "Dev Tools" },
+    { icon: FileSpreadsheet, label: "Data & Ops" },
   ];
 
   const solutions = [
-    { icon: Building2, name: "PropertyPortal", desc: "End-to-end systems for properties, tenancies and maintenance." },
+    { icon: Server, name: "CloudInfra", desc: "Scalable cloud infrastructure, CI/CD pipelines and zero-downtime deploys." },
     { icon: Receipt, name: "InvoiceDashboard", desc: "Track invoices, reconcile payments and view balances at a glance." },
-    { icon: Users, name: "TenantLandlordSuite", desc: "Branded portals with role-based access for owners and renters." },
+    { icon: Shield, name: "AuthGateway", desc: "Secure authentication, role-based access and SSO across your apps." },
     { icon: UserCog, name: "StaffManager", desc: "Rotas, tasks, permissions and internal comms in one place." },
     { icon: Calendar, name: "BookingEngine", desc: "Take bookings, manage availability and automate confirmations." },
     { icon: Bell, name: "NotifyFlow", desc: "Trigger reminders, alerts and follow-ups without lifting a finger." },
