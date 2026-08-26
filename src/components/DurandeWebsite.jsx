@@ -665,10 +665,14 @@ export default function DurandeWebsite() {
               </p>
             </Reveal>
             <Reveal delay={180}>
-              <div className="mt-8 inline-flex items-center gap-2.5 text-[14px] text-[#4A4A52]" style={{ fontFamily: MONO }}>
+              <a
+                href="mailto:info@durande.com"
+                className="mt-8 inline-flex items-center gap-2.5 text-[14px] text-[#16161A] transition-colors hover:text-[#2547E0]"
+                style={{ fontFamily: MONO }}
+              >
                 <Mail className="h-4 w-4 text-[#2547E0]" />
-                Prefer email? Use the form — it reaches us directly.
-              </div>
+                info@durande.com
+              </a>
             </Reveal>
           </div>
 
@@ -740,25 +744,39 @@ export default function DurandeWebsite() {
 
       {/* ===================== FOOTER ===================== */}
       <footer className="border-t border-[#E7E5DF] px-6 py-12 lg:px-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-          <div className="flex items-baseline gap-0.5">
-            <span className="text-[16px] font-semibold tracking-tight">Durande</span>
-            <span className="text-[16px] font-semibold tracking-tight text-[#2547E0]">.com</span>
-          </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {navItems.map((it) => (
-              <button
-                key={it.id}
-                onClick={() => scrollTo(it.id)}
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+            <div className="flex items-baseline gap-0.5">
+              <span className="text-[16px] font-semibold tracking-tight">Durande</span>
+              <span className="text-[16px] font-semibold tracking-tight text-[#2547E0]">.com</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              {navItems.map((it) => (
+                <button
+                  key={it.id}
+                  onClick={() => scrollTo(it.id)}
+                  className="text-[13px] text-[#6C6C74] transition-colors hover:text-[#16161A]"
+                >
+                  {it.label}
+                </button>
+              ))}
+              <a
+                href="mailto:info@durande.com"
                 className="text-[13px] text-[#6C6C74] transition-colors hover:text-[#16161A]"
               >
-                {it.label}
-              </button>
-            ))}
+                info@durande.com
+              </a>
+            </div>
           </div>
-          <span className="text-[12px] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
-            © 2026 Durande
-          </span>
+
+          <div className="mt-8 flex flex-col gap-2 border-t border-[#EDEBE5] pt-6 sm:flex-row sm:items-center sm:justify-between">
+            <span className="text-[12px] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
+              Durande Limited · Registered in England &amp; Wales · Company No. 16680027
+            </span>
+            <span className="text-[12px] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
+              © 2026 Durande Limited
+            </span>
+          </div>
         </div>
       </footer>
 
