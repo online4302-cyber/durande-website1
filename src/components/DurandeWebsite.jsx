@@ -15,12 +15,9 @@ import {
   X,
   Mail,
   MapPin,
-  Building2,
-  Home,
-  ShoppingBag,
   Briefcase,
   Rocket,
-  Store,
+  ShoppingBag,
   FileSpreadsheet,
   Shield,
   Zap,
@@ -35,7 +32,17 @@ import {
 } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
-/*  Hooks                                                                     */
+/*  Type tokens                                                               */
+/* -------------------------------------------------------------------------- */
+const SERIF = '"Instrument Serif", Georgia, "Times New Roman", serif';
+const SANS = '"Geist", ui-sans-serif, system-ui, sans-serif';
+const MONO = '"Geist Mono", ui-monospace, "SFMono-Regular", monospace';
+
+/* Palette: paper #FBFBF9 · panel #FFFFFF · ink #16161A · muted #6C6C74
+   line #E7E5DF · accent #2547E0 · tint #EDF0FE                            */
+
+/* -------------------------------------------------------------------------- */
+/*  Reveal on scroll                                                          */
 /* -------------------------------------------------------------------------- */
 function useReveal() {
   const ref = useRef(null);
@@ -48,7 +55,7 @@ function useReveal() {
           obs.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.12 }
     );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
@@ -61,8 +68,8 @@ function Reveal({ children, delay = 0, className = "" }) {
   return (
     <div
       ref={ref}
-      className={`transition-all duration-[900ms] ease-out ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+      className={`transition-all duration-700 ease-out motion-reduce:transition-none ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       } ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
@@ -72,128 +79,44 @@ function Reveal({ children, delay = 0, className = "" }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Atoms                                                                     */
+/*  Primitives                                                                */
 /* -------------------------------------------------------------------------- */
-const Mono = ({ children, className = "" }) => (
+const Eyebrow = ({ index, children }) => (
   <span
-    className={className}
-    style={{ fontFamily: '"Geist Mono", "JetBrains Mono", ui-monospace, monospace' }}
+    className="inline-flex items-center gap-2.5 text-[11px] uppercase tracking-[0.22em] text-[#6C6C74]"
+    style={{ fontFamily: MONO }}
   >
-    {children}
+    <span className="text-[#2547E0]">{index}</span>
+    <span className="h-px w-6 bg-[#D9D7CF]" />
+    <span>{children}</span>
   </span>
 );
 
-const SectionLabel = ({ number, children, light = false }) => (
-  <Mono
-    className={`inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] ${
-      light ? "text-zinc-500" : "text-zinc-500"
-    }`}
+const Primary = ({ children, onClick, className = "" }) => (
+  <button
+    onClick={onClick}
+    className={`group inline-flex items-center justify-center gap-2 rounded-full bg-[#16161A] px-6 py-3 text-[14px] font-medium text-white transition-colors duration-200 hover:bg-[#2547E0] motion-reduce:transition-none ${className}`}
   >
-    <span className={light ? "text-blue-600" : "text-blue-400"}>//</span>
-    <span>{number}</span>
-    <span className={light ? "text-zinc-300" : "text-zinc-700"}>—</span>
-    <span className={light ? "text-zinc-700" : "text-zinc-400"}>{children}</span>
-  </Mono>
+    {children}
+    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none" />
+  </button>
 );
 
-const StatusDot = ({ color = "emerald" }) => (
-  <span className="relative flex h-1.5 w-1.5">
-    <span
-      className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${
-        color === "emerald" ? "bg-emerald-500" : "bg-blue-500"
-      }`}
-    />
-    <span
-      className={`relative inline-flex h-1.5 w-1.5 rounded-full ${
-        color === "emerald" ? "bg-emerald-500" : "bg-blue-500"
-      }`}
-    />
+const Ghost = ({ children, onClick, className = "" }) => (
+  <button
+    onClick={onClick}
+    className={`group inline-flex items-center justify-center gap-2 rounded-full border border-[#D9D7CF] bg-transparent px-6 py-3 text-[14px] font-medium text-[#16161A] transition-colors duration-200 hover:border-[#16161A] motion-reduce:transition-none ${className}`}
+  >
+    {children}
+    <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none" />
+  </button>
+);
+
+const Dot = () => (
+  <span className="relative flex h-2 w-2">
+    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2547E0] opacity-60 motion-reduce:hidden" />
+    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#2547E0]" />
   </span>
-);
-
-const PrimaryButton = ({ children, onClick, className = "" }) => (
-  <button
-    onClick={onClick}
-    className={`group inline-flex items-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-[13px] font-medium text-white shadow-[0_10px_40px_-15px_rgba(37,99,235,0.7)] transition-all duration-300 hover:translate-y-[-2px]`}
-  >
-    {children}
-    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-  </button>
-);
-
-const GhostButton = ({ children, onClick, light = false, className = "" }) => (
-  <button
-    onClick={onClick}
-    className={`group inline-flex items-center gap-2 rounded-md border px-5 py-3 text-[13px] font-medium backdrop-blur transition-all duration-300 hover:-translate-y-0.5 ${
-      light
-        ? "border-zinc-300 bg-white text-zinc-900 hover:border-zinc-900 hover:bg-zinc-900 hover:text-white"
-        : "border-white/10 bg-white/[0.02] text-zinc-200 hover:border-white/30 hover:bg-white/[0.05]"
-    } ${className}`}
-  >
-    {children}
-    <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-  </button>
-);
-
-/* -------------------------------------------------------------------------- */
-/*  Decoration                                                                */
-/* -------------------------------------------------------------------------- */
-const GridBg = ({ opacity = 0.06 }) => (
-  <div
-    className="pointer-events-none absolute inset-0"
-    style={{
-      opacity,
-      backgroundImage:
-        "linear-gradient(rgba(59,130,246,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.6) 1px, transparent 1px)",
-      backgroundSize: "56px 56px",
-      maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-      WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-    }}
-  />
-);
-
-const GridBgLight = ({ opacity = 0.5 }) => (
-  <div
-    className="pointer-events-none absolute inset-0"
-    style={{
-      opacity,
-      backgroundImage:
-        "linear-gradient(rgba(15,23,42,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(15,23,42,0.05) 1px, transparent 1px)",
-      backgroundSize: "56px 56px",
-      maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-      WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
-    }}
-  />
-);
-
-/* Site-wide grid — subtle ambient texture, fades out toward the edges */
-const GlobalGrid = () => (
-  <div
-    className="pointer-events-none fixed inset-0 z-0"
-    style={{
-      backgroundImage:
-        "linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px)",
-      backgroundSize: "64px 64px",
-      maskImage:
-        "radial-gradient(ellipse 110% 85% at 50% 0%, black 10%, transparent 60%)",
-      WebkitMaskImage:
-        "radial-gradient(ellipse 110% 85% at 50% 0%, black 10%, transparent 60%)",
-    }}
-  />
-);
-
-const Glow = ({ className = "" }) => (
-  <div className={`pointer-events-none absolute rounded-full blur-[140px] ${className}`} />
-);
-
-const Noise = () => (
-  <div
-    className="pointer-events-none absolute inset-0 opacity-[0.025] mix-blend-overlay"
-    style={{
-      backgroundImage:
-        "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3CfeDisplacementMap in='SourceGraphic' scale='80'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E\")",
-    }}
-  />
 );
 
 /* -------------------------------------------------------------------------- */
@@ -202,16 +125,11 @@ const Noise = () => (
 export default function DurandeWebsite() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    service: "",
-    message: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", service: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 16);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -244,49 +162,41 @@ export default function DurandeWebsite() {
 
   /* ------------------------------ data ------------------------------ */
   const navItems = [
-    { label: "services", id: "services", n: "01" },
-    { label: "process", id: "process", n: "02" },
-    { label: "solutions", id: "solutions", n: "03" },
-    { label: "pricing", id: "pricing", n: "04" },
-    { label: "contact", id: "contact", n: "05" },
+    { label: "Services", id: "services" },
+    { label: "Process", id: "process" },
+    { label: "Systems", id: "solutions" },
+    { label: "Pricing", id: "pricing" },
+    { label: "Contact", id: "contact" },
   ];
 
   const services = [
-    { icon: Server, title: "Hosting Consultancy", file: "hosting.ts", desc: "Pick the right infrastructure for your scale. Performance, security and cost reviewed end-to-end." },
-    { icon: Code2, title: "Web App Development", file: "web-app.ts", desc: "Modern, secure web applications built around your business logic — fast, maintainable, ready to scale." },
-    { icon: Users, title: "Client Portals", file: "portal.ts", desc: "Branded portals where customers log in, view information, upload documents and self-serve 24/7." },
-    { icon: Workflow, title: "Business Automation", file: "automate.ts", desc: "Replace repetitive admin with automated workflows that save hours every week and remove human error." },
-    { icon: Sparkles, title: "Custom Software", file: "custom.ts", desc: "Bespoke software shaped to exactly how your business operates — no compromises, no bloat." },
-    { icon: Globe, title: "Website Development", file: "website.ts", desc: "Polished marketing sites that convert visitors and properly represent your brand." },
-    { icon: LayoutDashboard, title: "CRM & Dashboards", file: "dashboard.ts", desc: "Centralised dashboards that give you a single source of truth for your operations." },
-    { icon: Plug, title: "API Integrations", file: "integrate.ts", desc: "Connect payments, email, accounting and CRM tools into one smooth, unified workflow." },
+    { icon: Code2, title: "Web App Development", file: "web-app", desc: "Modern, secure web applications built around your business logic — fast, maintainable, ready to scale." },
+    { icon: Users, title: "Client Portals", file: "portals", desc: "Branded portals where customers log in, view information, upload documents and self-serve around the clock." },
+    { icon: Workflow, title: "Business Automation", file: "automation", desc: "Replace repetitive admin with automated workflows that save hours every week and remove human error." },
+    { icon: Sparkles, title: "Custom Software", file: "custom", desc: "Bespoke software shaped to exactly how your business operates — no compromises, no bloat." },
+    { icon: LayoutDashboard, title: "CRM & Dashboards", file: "dashboards", desc: "Centralised dashboards that give you a single source of truth for your operations." },
+    { icon: Plug, title: "API Integrations", file: "integrations", desc: "Connect payments, email, accounting and CRM tools into one smooth, unified workflow." },
+    { icon: Globe, title: "Website Development", file: "websites", desc: "Polished marketing sites that convert visitors and properly represent your brand." },
+    { icon: Server, title: "Hosting Consultancy", file: "hosting", desc: "Pick the right infrastructure for your scale. Performance, security and cost reviewed end-to-end." },
   ];
 
   const whyUs = [
     { icon: Palette, title: "Tailored Solutions", desc: "Software shaped to your workflow — not the other way around." },
     { icon: Shield, title: "Secure & Scalable", desc: "Built on robust foundations that grow as your business grows." },
-    { icon: Headphones, title: "Fast, Reliable Support", desc: "Real humans, quick replies, and proactive maintenance." },
+    { icon: Headphones, title: "Reliable Support", desc: "Real humans, quick replies, and proactive maintenance." },
     { icon: Briefcase, title: "Business-Focused", desc: "We think outcomes first — technology is the tool, not the point." },
     { icon: Cpu, title: "Clean Interfaces", desc: "UI your team and customers actually enjoy using." },
     { icon: Zap, title: "Automation by Default", desc: "Reclaim hours every week by removing manual, repetitive work." },
   ];
 
   const steps = [
-    { n: "01", cmd: "consultation", title: "Discovery", desc: "We listen to your goals, map your current systems, and identify where software will create the biggest impact." },
+    { n: "01", cmd: "discovery", title: "Discovery", desc: "We listen to your goals, map your current systems, and identify where software will create the biggest impact." },
     { n: "02", cmd: "design", title: "Planning & Design", desc: "Clear scope, sensible architecture and clean interface designs — agreed with you before we build." },
-    { n: "03", cmd: "build", title: "Development", desc: "We build in iterative sprints with regular previews so nothing is ever a surprise at the end." },
-    { n: "04", cmd: "deploy", title: "Launch & Support", desc: "We deploy, train your team, and stay on hand for ongoing improvements as your business evolves." },
+    { n: "03", cmd: "build", title: "Development", desc: "We build in iterative sprints with regular previews, so nothing is ever a surprise at the end." },
+    { n: "04", cmd: "launch", title: "Launch & Support", desc: "We deploy, train your team, and stay on hand for ongoing improvements as your business evolves." },
   ];
 
-  const industries = [
-    { icon: Cpu, label: "SaaS" },
-    { icon: Receipt, label: "Fintech" },
-    { icon: ShoppingBag, label: "E-commerce" },
-    { icon: Briefcase, label: "Services" },
-    { icon: Rocket, label: "Startups" },
-    { icon: Terminal, label: "Dev Tools" },
-    { icon: FileSpreadsheet, label: "Data & Ops" },
-  ];
+  const industries = ["SaaS", "Fintech", "E-commerce", "Professional Services", "Startups", "Dev Tools", "Data & Ops"];
 
   const solutions = [
     { icon: Server, name: "CloudInfra", desc: "Scalable cloud infrastructure, CI/CD pipelines and zero-downtime deploys." },
@@ -309,14 +219,14 @@ export default function DurandeWebsite() {
       name: "Business Web Portal",
       price: "999",
       tagline: "For growing businesses needing a more complete portal system.",
-      features: ["Custom web portal", "User roles and permissions", "Admin dashboard", "Customer/client dashboard", "Database integration", "Forms and document uploads", "Email notifications", "Mobile responsive"],
+      features: ["Custom web portal", "User roles and permissions", "Admin dashboard", "Customer / client dashboard", "Database integration", "Forms and document uploads", "Email notifications", "Mobile responsive"],
       featured: true,
     },
     {
       name: "Advanced Portal & Automation",
       price: "1,999",
       tagline: "For businesses needing automation and advanced database features.",
-      features: ["Advanced custom portal", "Full database design", "Automation workflows", "API integrations", "Payment or invoice tracking", "Reports and analytics dashboard", "Email/SMS automation"],
+      features: ["Advanced custom portal", "Full database design", "Automation workflows", "API integrations", "Payment or invoice tracking", "Reports and analytics dashboard", "Email / SMS automation"],
       featured: false,
     },
     {
@@ -334,162 +244,205 @@ export default function DurandeWebsite() {
     "TanStack", "Prisma", "Redis", "GraphQL",
   ];
 
+  /* ------------------------------ render ------------------------------ */
   return (
     <div
-      className="min-h-screen bg-[#08080a] text-zinc-100 antialiased selection:bg-blue-500/30 selection:text-white"
-      style={{ fontFamily: '"Geist", system-ui, sans-serif' }}
+      className="min-h-screen bg-[#FBFBF9] text-[#16161A] antialiased selection:bg-[#2547E0] selection:text-white"
+      style={{ fontFamily: SANS }}
     >
-      <GlobalGrid />
-      {/* ===================================================================
-          NAV
-          =================================================================== */}
+      {/* ===================== NAV ===================== */}
       <nav
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "bg-[#08080a]/80 backdrop-blur-xl border-b border-white/[0.06]"
-            : "bg-transparent"
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+          scrolled || menuOpen
+            ? "border-b border-[#E7E5DF] bg-[#FBFBF9]/95 backdrop-blur-xl"
+            : "border-b border-transparent"
         }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-          <button onClick={() => scrollTo("hero")} className="flex items-center gap-2.5 group">
-            <div className="relative h-8 w-8 rounded-md bg-gradient-to-br from-blue-500 to-blue-700 shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-transform duration-500 group-hover:rotate-6">
-              <div className="absolute inset-[2px] rounded-[5px] bg-[#08080a] flex items-center justify-center">
-                <Mono className="text-blue-400 text-sm font-medium">D</Mono>
-              </div>
-            </div>
-            <Mono className="text-[14px] tracking-tight text-zinc-100">
-              durande<span className="text-blue-400">.</span>com
-            </Mono>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
+          <button onClick={() => scrollTo("top")} className="flex items-baseline gap-0.5">
+            <span className="text-[19px] font-semibold tracking-tight text-[#16161A]">Durande</span>
+            <span className="text-[19px] font-semibold tracking-tight text-[#2547E0]">.com</span>
           </button>
 
-          <div className="hidden lg:flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1 backdrop-blur">
+          <div className="hidden items-center gap-8 lg:flex">
             {navItems.map((it) => (
               <button
                 key={it.id}
                 onClick={() => scrollTo(it.id)}
-                className="group rounded-full px-3.5 py-1.5 text-[13px] text-zinc-400 transition-all hover:bg-white/[0.05] hover:text-white"
+                className="text-[14px] text-[#6C6C74] transition-colors hover:text-[#16161A]"
               >
-                <Mono className="text-blue-400/70 mr-1.5 text-[11px]">{it.n}</Mono>
                 {it.label}
               </button>
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-3">
-            <div className="hidden xl:flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1.5">
-              <StatusDot />
-              <Mono className="text-[10px] uppercase tracking-[0.18em] text-zinc-400">
-                all systems operational
-              </Mono>
-            </div>
-            <button
-              onClick={() => scrollTo("contact")}
-              className="group inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-4 py-2 text-[13px] font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-400/50 hover:translate-y-[-2px] transition-transform"
-            >
-              Get in touch
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-            </button>
+          <div className="hidden lg:block">
+            <Primary onClick={() => scrollTo("contact")} className="px-5 py-2.5 text-[13px]">
+              Start a project
+            </Primary>
           </div>
 
           <button
-            className="lg:hidden p-2 rounded-md text-zinc-300 hover:bg-white/[0.05]"
+            className="p-2 text-[#16161A] lg:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Menu"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
 
         {menuOpen && (
-          <div className="lg:hidden border-t border-white/[0.06] bg-[#08080a]/95 backdrop-blur-xl">
-            <div className="flex flex-col gap-1 px-6 py-4">
+          <div className="border-t border-[#E7E5DF] bg-[#FBFBF9] shadow-[0_20px_40px_-24px_rgba(22,22,26,0.3)] lg:hidden">
+            <div className="mx-auto flex max-w-6xl flex-col px-6 py-4">
               {navItems.map((it) => (
                 <button
                   key={it.id}
                   onClick={() => scrollTo(it.id)}
-                  className="rounded-md px-4 py-3 text-left text-sm text-zinc-300 hover:bg-white/[0.05]"
+                  className="py-3 text-left text-[15px] text-[#16161A]"
                 >
-                  <Mono className="text-blue-400/70 mr-2 text-[11px]">{it.n}</Mono>
                   {it.label}
                 </button>
               ))}
-              <button
-                onClick={() => scrollTo("contact")}
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-md bg-blue-600 px-5 py-3 text-sm font-medium text-white shadow-[0_0_25px_-5px_rgba(59,130,246,0.6)] ring-1 ring-blue-400/50"
-              >
-                Get in touch
-                <ArrowRight className="h-3.5 w-3.5" />
-              </button>
+              <Primary onClick={() => scrollTo("contact")} className="mt-3">
+                Start a project
+              </Primary>
             </div>
           </div>
         )}
       </nav>
 
-      {/* ===================================================================
-          HERO  ·  DARK
-          =================================================================== */}
-      <section
-        id="hero"
-        className="relative flex min-h-screen w-full items-center justify-center overflow-hidden px-6 py-20"
-      >
-        <GridBg opacity={0.08} />
-        <Glow className="absolute -top-40 -right-40 h-80 w-80 bg-blue-500/20" />
-        <Noise />
+      {/* ===================== HERO ===================== */}
+      <section id="top" className="relative overflow-hidden px-6 pt-36 pb-20 lg:px-8 lg:pt-44 lg:pb-28">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(22,22,26,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(22,22,26,0.04) 1px, transparent 1px)",
+            backgroundSize: "72px 72px",
+            maskImage: "radial-gradient(ellipse 90% 60% at 50% 0%, black 5%, transparent 65%)",
+            WebkitMaskImage: "radial-gradient(ellipse 90% 60% at 50% 0%, black 5%, transparent 65%)",
+          }}
+        />
+        <div className="relative mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <div>
+            <Reveal>
+              <div className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-[#E7E5DF] bg-white px-3.5 py-1.5">
+                <Dot />
+                <span className="text-[12px] tracking-tight text-[#6C6C74]" style={{ fontFamily: MONO }}>
+                  Accepting new projects — 2026
+                </span>
+              </div>
+            </Reveal>
 
-        <div className="relative z-10 mx-auto max-w-4xl text-center">
-          <Reveal delay={0}>
-            <h1 className="mb-6 text-5xl font-bold tracking-tight lg:text-7xl">
-              <span className="text-white">Bespoke </span>
-              <span className="bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-                Software Solutions
-              </span>
-              <br />
-              <span className="text-white">Built for Your Business</span>
-            </h1>
-          </Reveal>
+            <Reveal delay={80}>
+              <h1
+                className="text-[44px] leading-[1.04] tracking-[-0.01em] text-[#16161A] sm:text-[58px] lg:text-[68px]"
+                style={{ fontFamily: SERIF }}
+              >
+                We design and build
+                <br className="hidden sm:block" /> the software your
+                <br className="hidden sm:block" /> business{" "}
+                <span className="italic text-[#2547E0]">actually runs on.</span>
+              </h1>
+            </Reveal>
 
-          <Reveal delay={100}>
-            <p className="mb-8 max-w-2xl mx-auto text-xl text-zinc-400">
-              From web portals to business automation, we craft custom software that solves real problems and scales with you.
-            </p>
-          </Reveal>
+            <Reveal delay={160}>
+              <p className="mt-7 max-w-xl text-[17px] leading-relaxed text-[#5A5A62]">
+                Durande.com is a UK software studio building web apps, client portals,
+                automation and custom systems for growing businesses. We turn manual,
+                messy operations into clean software that scales.
+              </p>
+            </Reveal>
 
+            <Reveal delay={240}>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Primary onClick={() => scrollTo("contact")}>Start a project</Primary>
+                <Ghost onClick={() => scrollTo("services")}>Explore services</Ghost>
+              </div>
+            </Reveal>
+
+            <Reveal delay={320}>
+              <div
+                className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px] text-[#9A9AA0]"
+                style={{ fontFamily: MONO }}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5" /> United Kingdom
+                </span>
+                <span>Web · Portals · Automation · APIs</span>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Signature: build manifest panel */}
           <Reveal delay={200}>
-            <div className="flex flex-col gap-4 justify-center sm:flex-row">
-              <PrimaryButton onClick={() => scrollTo("services")}>
-                Explore Services
-              </PrimaryButton>
-              <GhostButton onClick={() => scrollTo("contact")}>
-                Contact Us
-              </GhostButton>
+            <div className="rounded-xl border border-[#E7E5DF] bg-white shadow-[0_1px_0_rgba(22,22,26,0.02),0_20px_50px_-30px_rgba(22,22,26,0.25)]">
+              <div className="flex items-center justify-between border-b border-[#EDEBE5] px-4 py-3">
+                <span className="text-[12px] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
+                  durande.manifest
+                </span>
+                <div className="flex gap-1.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#E7E5DF]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#E7E5DF]" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#2547E0]/70" />
+                </div>
+              </div>
+              <div className="space-y-2.5 px-5 py-5 text-[13px]" style={{ fontFamily: MONO }}>
+                <ManifestLine k="studio" v="durande.com" />
+                <ManifestLine k="services" v="8 capabilities" />
+                <ManifestLine k="systems" v="6 shipped products" />
+                <ManifestLine k="stack" v="react · node · postgres" />
+                <ManifestLine k="delivery" v="iterative sprints" />
+                <ManifestLine k="status" v="accepting projects" accent />
+              </div>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ===================================================================
-          SERVICES
-          =================================================================== */}
-      <section id="services" className="relative py-20 px-6 lg:py-32">
-        <GridBgLight opacity={0.3} />
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0}>
-            <SectionLabel number="01">Services</SectionLabel>
+      {/* ===================== INDUSTRIES STRIP ===================== */}
+      <section className="border-y border-[#E7E5DF] bg-white/60 px-6 py-6 lg:px-8">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-8 gap-y-3">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
+            Built for
+          </span>
+          {industries.map((it) => (
+            <span key={it} className="text-[14px] text-[#6C6C74]">
+              {it}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ===================== SERVICES ===================== */}
+      <section id="services" className="px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-6xl">
+          <Reveal>
+            <Eyebrow index="01">Services</Eyebrow>
+          </Reveal>
+          <Reveal delay={60}>
+            <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <h2 className="max-w-2xl text-[34px] leading-tight tracking-tight lg:text-[44px]" style={{ fontFamily: SERIF }}>
+                Everything you need to ship, run and scale software.
+              </h2>
+              <p className="max-w-sm text-[15px] leading-relaxed text-[#6C6C74]">
+                Eight core capabilities — combine them into whatever your business needs.
+              </p>
+            </div>
           </Reveal>
 
-          <Reveal delay={50} className="mb-16">
-            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">What We Offer</h2>
-            <p className="max-w-2xl text-lg text-zinc-400">
-              Comprehensive software solutions tailored to your business needs
-            </p>
-          </Reveal>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {services.map((service, idx) => (
-              <Reveal key={idx} delay={idx * 50}>
-                <div className="group relative rounded-lg border border-white/[0.08] bg-white/[0.02] p-6 transition-all duration-300 hover:border-blue-500/30 hover:bg-white/[0.04]">
-                  <service.icon className="mb-4 h-8 w-8 text-blue-400 transition-colors group-hover:text-blue-300" />
-                  <h3 className="mb-2 text-lg font-semibold">{service.title}</h3>
-                  <p className="text-sm text-zinc-400 transition-colors group-hover:text-zinc-300">{service.desc}</p>
+          <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-[#E7E5DF] bg-[#E7E5DF] sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((s, i) => (
+              <Reveal key={s.title} delay={(i % 4) * 60}>
+                <div className="group h-full bg-white p-6 transition-colors duration-200 hover:bg-[#FAFAFE]">
+                  <div className="flex items-center justify-between">
+                    <s.icon className="h-5 w-5 text-[#2547E0]" strokeWidth={1.6} />
+                    <span className="text-[11px] text-[#B8B8BE]" style={{ fontFamily: MONO }}>
+                      {s.file}.ts
+                    </span>
+                  </div>
+                  <h3 className="mt-5 text-[16px] font-semibold tracking-tight text-[#16161A]">{s.title}</h3>
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-[#6C6C74]">{s.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -497,26 +450,33 @@ export default function DurandeWebsite() {
         </div>
       </section>
 
-      {/* ===================================================================
-          PROCESS
-          =================================================================== */}
-      <section id="process" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0}>
-            <SectionLabel number="02">Process</SectionLabel>
+      {/* ===================== PROCESS ===================== */}
+      <section id="process" className="border-t border-[#E7E5DF] bg-white px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-6xl">
+          <Reveal>
+            <Eyebrow index="02">Process</Eyebrow>
+          </Reveal>
+          <Reveal delay={60}>
+            <h2 className="mt-5 max-w-2xl text-[34px] leading-tight tracking-tight lg:text-[44px]" style={{ fontFamily: SERIF }}>
+              A clear path from idea to launch.
+            </h2>
           </Reveal>
 
-          <Reveal delay={50} className="mb-16">
-            <h2 className="text-4xl font-bold lg:text-5xl">How We Work</h2>
-          </Reveal>
-
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step, idx) => (
-              <Reveal key={idx} delay={idx * 50}>
+          <div className="mt-14 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+            {steps.map((st, i) => (
+              <Reveal key={st.n} delay={i * 70}>
                 <div className="relative">
-                  <div className="mb-2 text-4xl font-bold text-blue-400/20">{step.n}</div>
-                  <h3 className="mb-3 text-xl font-semibold">{step.title}</h3>
-                  <p className="text-zinc-400">{step.desc}</p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[13px] text-[#2547E0]" style={{ fontFamily: MONO }}>
+                      {st.n}
+                    </span>
+                    <span className="h-px flex-1 bg-[#E7E5DF]" />
+                  </div>
+                  <span className="mt-4 block text-[12px] text-[#B8B8BE]" style={{ fontFamily: MONO }}>
+                    $ {st.cmd}
+                  </span>
+                  <h3 className="mt-2 text-[19px] font-semibold tracking-tight text-[#16161A]">{st.title}</h3>
+                  <p className="mt-2.5 text-[14px] leading-relaxed text-[#6C6C74]">{st.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -524,23 +484,34 @@ export default function DurandeWebsite() {
         </div>
       </section>
 
-      {/* ===================================================================
-          WHY US
-          =================================================================== */}
-      <section className="relative py-20 px-6 lg:py-32">
-        <GridBgLight opacity={0.3} />
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0} className="mb-16">
-            <h2 className="text-4xl font-bold lg:text-5xl">Why Choose Us</h2>
+      {/* ===================== SYSTEMS ===================== */}
+      <section id="solutions" className="px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-6xl">
+          <Reveal>
+            <Eyebrow index="03">Systems we ship</Eyebrow>
+          </Reveal>
+          <Reveal delay={60}>
+            <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <h2 className="max-w-2xl text-[34px] leading-tight tracking-tight lg:text-[44px]" style={{ fontFamily: SERIF }}>
+                Proven building blocks, tailored to you.
+              </h2>
+              <p className="max-w-sm text-[15px] leading-relaxed text-[#6C6C74]">
+                Battle-tested modules we assemble and customise, so you don't start from zero.
+              </p>
+            </div>
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {whyUs.map((item, idx) => (
-              <Reveal key={idx} delay={idx * 50}>
-                <div className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-6 transition-colors hover:border-blue-500/30">
-                  <item.icon className="mb-4 h-6 w-6 text-blue-400" />
-                  <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-zinc-400">{item.desc}</p>
+          <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {solutions.map((sol, i) => (
+              <Reveal key={sol.name} delay={(i % 3) * 60}>
+                <div className="group h-full rounded-xl border border-[#E7E5DF] bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#C9C7BF] hover:shadow-[0_16px_40px_-28px_rgba(22,22,26,0.4)] motion-reduce:hover:translate-y-0">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EDF0FE]">
+                    <sol.icon className="h-5 w-5 text-[#2547E0]" strokeWidth={1.7} />
+                  </div>
+                  <h3 className="mt-5 text-[16px] font-semibold tracking-tight" style={{ fontFamily: MONO }}>
+                    {sol.name}
+                  </h3>
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-[#6C6C74]">{sol.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -548,26 +519,29 @@ export default function DurandeWebsite() {
         </div>
       </section>
 
-      {/* ===================================================================
-          SOLUTIONS
-          =================================================================== */}
-      <section id="solutions" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0}>
-            <SectionLabel number="03">Solutions</SectionLabel>
+      {/* ===================== WHY US ===================== */}
+      <section className="border-y border-[#E7E5DF] bg-white px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-6xl">
+          <Reveal>
+            <Eyebrow index="04">Why Durande</Eyebrow>
+          </Reveal>
+          <Reveal delay={60}>
+            <h2 className="mt-5 max-w-2xl text-[34px] leading-tight tracking-tight lg:text-[44px]" style={{ fontFamily: SERIF }}>
+              An engineering partner, not just a vendor.
+            </h2>
           </Reveal>
 
-          <Reveal delay={50} className="mb-16">
-            <h2 className="text-4xl font-bold lg:text-5xl">Pre-Built Solutions</h2>
-          </Reveal>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {solutions.map((solution, idx) => (
-              <Reveal key={idx} delay={idx * 50}>
-                <div className="group rounded-lg border border-white/[0.08] bg-white/[0.02] p-6 transition-all hover:border-blue-500/30 hover:bg-white/[0.04]">
-                  <solution.icon className="mb-4 h-8 w-8 text-blue-400 transition-colors group-hover:text-blue-300" />
-                  <h3 className="mb-2 text-lg font-semibold">{solution.name}</h3>
-                  <p className="text-sm text-zinc-400 transition-colors group-hover:text-zinc-300">{solution.desc}</p>
+          <div className="mt-14 grid grid-cols-1 gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {whyUs.map((w, i) => (
+              <Reveal key={w.title} delay={(i % 3) * 60}>
+                <div className="flex gap-4">
+                  <div className="mt-0.5 flex h-9 w-9 flex-none items-center justify-center rounded-lg border border-[#E7E5DF]">
+                    <w.icon className="h-[18px] w-[18px] text-[#16161A]" strokeWidth={1.7} />
+                  </div>
+                  <div>
+                    <h3 className="text-[15px] font-semibold tracking-tight">{w.title}</h3>
+                    <p className="mt-1.5 text-[13.5px] leading-relaxed text-[#6C6C74]">{w.desc}</p>
+                  </div>
                 </div>
               </Reveal>
             ))}
@@ -575,75 +549,96 @@ export default function DurandeWebsite() {
         </div>
       </section>
 
-      {/* ===================================================================
-          INDUSTRIES
-          =================================================================== */}
-      <section className="relative py-20 px-6 lg:py-32">
-        <GridBgLight opacity={0.3} />
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0} className="mb-16">
-            <h2 className="text-4xl font-bold lg:text-5xl">Industries We Serve</h2>
-          </Reveal>
-
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-            {industries.map((industry, idx) => (
-              <Reveal key={idx} delay={idx * 30}>
-                <div className="group flex flex-col items-center gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] p-4 text-center transition-all hover:border-blue-500/30 hover:bg-white/[0.04]">
-                  <industry.icon className="h-6 w-6 text-blue-400 transition-colors group-hover:text-blue-300" />
-                  <span className="text-sm text-zinc-300">{industry.label}</span>
-                </div>
-              </Reveal>
+      {/* ===================== STACK ===================== */}
+      <section className="overflow-hidden py-14">
+        <div className="mx-auto mb-8 max-w-6xl px-6 lg:px-8">
+          <span className="text-[11px] uppercase tracking-[0.2em] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
+            Our toolkit
+          </span>
+        </div>
+        <div className="relative flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+          <div className="flex animate-[marquee_38s_linear_infinite] gap-3 pr-3 motion-reduce:animate-none">
+            {[...stack, ...stack].map((t, i) => (
+              <span
+                key={i}
+                className="whitespace-nowrap rounded-full border border-[#E7E5DF] bg-white px-4 py-2 text-[13px] text-[#4A4A52]"
+                style={{ fontFamily: MONO }}
+              >
+                {t}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===================================================================
-          PRICING
-          =================================================================== */}
-      <section id="pricing" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0}>
-            <SectionLabel number="04">Pricing</SectionLabel>
+      {/* ===================== PRICING ===================== */}
+      <section id="pricing" className="border-t border-[#E7E5DF] px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-6xl">
+          <Reveal>
+            <Eyebrow index="05">Pricing</Eyebrow>
+          </Reveal>
+          <Reveal delay={60}>
+            <div className="mt-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <h2 className="max-w-2xl text-[34px] leading-tight tracking-tight lg:text-[44px]" style={{ fontFamily: SERIF }}>
+                Transparent starting points.
+              </h2>
+              <p className="max-w-sm text-[15px] leading-relaxed text-[#6C6C74]">
+                Fixed-scope packages to begin with — every project is quoted to fit. Prices in GBP.
+              </p>
+            </div>
           </Reveal>
 
-          <Reveal delay={50} className="mb-16">
-            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Simple, Transparent Pricing</h2>
-            <p className="max-w-2xl text-lg text-zinc-400">
-              Choose a package that fits your needs. All packages include ongoing support.
-            </p>
-          </Reveal>
-
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {pricing.map((plan, idx) => (
-              <Reveal key={idx} delay={idx * 50}>
+          <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {pricing.map((p, i) => (
+              <Reveal key={p.name} delay={(i % 4) * 60}>
                 <div
-                  className={`relative rounded-lg border p-6 transition-all ${
-                    plan.featured
-                      ? "border-blue-500/50 bg-blue-500/[0.05] ring-1 ring-blue-500/20"
-                      : "border-white/[0.08] bg-white/[0.02]"
+                  className={`flex h-full flex-col rounded-xl border p-6 ${
+                    p.featured
+                      ? "border-[#16161A] bg-[#16161A] text-white"
+                      : "border-[#E7E5DF] bg-white text-[#16161A]"
                   }`}
                 >
-                  <h3 className="mb-2 text-lg font-semibold">{plan.name}</h3>
-                  <p className="mb-4 text-sm text-zinc-400">{plan.tagline}</p>
-                  <div className="mb-6">
-                    <span className="text-3xl font-bold text-blue-400">${plan.price}</span>
-                    <span className="ml-2 text-sm text-zinc-500">one-time</span>
+                  {p.featured && (
+                    <span
+                      className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-[#2547E0] px-2.5 py-1 text-[10px] uppercase tracking-[0.15em] text-white"
+                      style={{ fontFamily: MONO }}
+                    >
+                      Most popular
+                    </span>
+                  )}
+                  <h3 className="text-[15px] font-semibold tracking-tight">{p.name}</h3>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className={`text-[15px] ${p.featured ? "text-zinc-400" : "text-[#9A9AA0]"}`}>£</span>
+                    <span className="text-[38px] font-semibold tracking-tight" style={{ fontFamily: SERIF }}>
+                      {p.price}
+                    </span>
                   </div>
-                  <ul className="mb-6 space-y-2">
-                    {plan.features.map((feature, fidx) => (
-                      <li key={fidx} className="flex items-start gap-2 text-sm text-zinc-400">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-400" />
-                        <span>{feature}</span>
+                  <p className={`mt-3 text-[13px] leading-relaxed ${p.featured ? "text-zinc-400" : "text-[#6C6C74]"}`}>
+                    {p.tagline}
+                  </p>
+                  <div className={`my-5 h-px w-full ${p.featured ? "bg-white/10" : "bg-[#E7E5DF]"}`} />
+                  <ul className="flex-1 space-y-2.5">
+                    {p.features.map((f) => (
+                      <li key={f} className="flex gap-2.5 text-[13px] leading-snug">
+                        <Check
+                          className={`mt-0.5 h-3.5 w-3.5 flex-none ${p.featured ? "text-[#7C93FF]" : "text-[#2547E0]"}`}
+                          strokeWidth={2.5}
+                        />
+                        <span className={p.featured ? "text-zinc-200" : "text-[#4A4A52]"}>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  <PrimaryButton
+                  <button
                     onClick={() => scrollTo("contact")}
-                    className="w-full justify-center"
+                    className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-medium transition-colors duration-200 ${
+                      p.featured
+                        ? "bg-white text-[#16161A] hover:bg-[#2547E0] hover:text-white"
+                        : "border border-[#D9D7CF] text-[#16161A] hover:border-[#16161A]"
+                    }`}
                   >
-                    Get Started
-                  </PrimaryButton>
+                    Get started
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </Reveal>
             ))}
@@ -651,139 +646,155 @@ export default function DurandeWebsite() {
         </div>
       </section>
 
-      {/* ===================================================================
-          TECH STACK
-          =================================================================== */}
-      <section className="relative py-20 px-6 lg:py-32">
-        <GridBgLight opacity={0.3} />
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <Reveal delay={0} className="mb-12">
-            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Technology Stack</h2>
-            <p className="text-lg text-zinc-400">
-              We use modern, battle-tested technologies
-            </p>
-          </Reveal>
-
-          <div className="flex flex-wrap gap-3">
-            {stack.map((tech, idx) => (
-              <Reveal key={idx} delay={idx * 20}>
-                <div className="rounded-full border border-white/[0.1] bg-white/[0.02] px-3 py-1.5 text-sm text-zinc-300 transition-colors hover:border-blue-500/30">
-                  {tech}
-                </div>
-              </Reveal>
-            ))}
+      {/* ===================== CONTACT ===================== */}
+      <section id="contact" className="border-t border-[#E7E5DF] bg-white px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <Reveal>
+              <Eyebrow index="06">Contact</Eyebrow>
+            </Reveal>
+            <Reveal delay={60}>
+              <h2 className="mt-5 text-[34px] leading-tight tracking-tight lg:text-[44px]" style={{ fontFamily: SERIF }}>
+                Tell us what you're building.
+              </h2>
+            </Reveal>
+            <Reveal delay={120}>
+              <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[#6C6C74]">
+                Send a message with a little about your project and we'll get back to you with
+                honest next steps — no obligation, no jargon.
+              </p>
+            </Reveal>
+            <Reveal delay={180}>
+              <div className="mt-8 inline-flex items-center gap-2.5 text-[14px] text-[#4A4A52]" style={{ fontFamily: MONO }}>
+                <Mail className="h-4 w-4 text-[#2547E0]" />
+                Prefer email? Use the form — it reaches us directly.
+              </div>
+            </Reveal>
           </div>
-        </div>
-      </section>
-
-      {/* ===================================================================
-          CONTACT
-          =================================================================== */}
-      <section id="contact" className="relative bg-white/[0.02] py-20 px-6 lg:py-32">
-        <Glow className="absolute -bottom-40 -right-40 h-80 w-80 bg-blue-500/10" />
-        <div className="relative z-10 mx-auto max-w-2xl">
-          <Reveal delay={0} className="mb-12 text-center">
-            <SectionLabel number="05">Contact</SectionLabel>
-          </Reveal>
-
-          <Reveal delay={50} className="mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold lg:text-5xl">Get In Touch</h2>
-            <p className="text-lg text-zinc-400">
-              Leave us a message and we'll get back to you.
-            </p>
-          </Reveal>
 
           <Reveal delay={100}>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-300">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Your name"
-                  required
-                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
-                />
-              </div>
+            <div className="rounded-xl border border-[#E7E5DF] bg-[#FBFBF9] p-6 lg:p-8">
+              <div className="space-y-5">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label="Name">
+                    <input
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      placeholder="Your name"
+                      className="w-full rounded-lg border border-[#E7E5DF] bg-white px-4 py-3 text-[14px] text-[#16161A] placeholder-[#B8B8BE] outline-none transition-colors focus:border-[#2547E0]"
+                    />
+                  </Field>
+                  <Field label="Email">
+                    <input
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      placeholder="you@company.com"
+                      className="w-full rounded-lg border border-[#E7E5DF] bg-white px-4 py-3 text-[14px] text-[#16161A] placeholder-[#B8B8BE] outline-none transition-colors focus:border-[#2547E0]"
+                    />
+                  </Field>
+                </div>
 
-              {/* Email */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-300">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="your@email.com"
-                  required
-                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
-                />
-              </div>
+                <Field label="Service of interest">
+                  <select
+                    value={form.service}
+                    onChange={(e) => setForm({ ...form, service: e.target.value })}
+                    className="w-full rounded-lg border border-[#E7E5DF] bg-white px-4 py-3 text-[14px] text-[#16161A] outline-none transition-colors focus:border-[#2547E0]"
+                  >
+                    <option value="">Select a service</option>
+                    <option value="web-app">Web App Development</option>
+                    <option value="portal">Client Portal</option>
+                    <option value="automation">Business Automation</option>
+                    <option value="custom">Custom Software</option>
+                    <option value="website">Website Development</option>
+                    <option value="dashboard">CRM &amp; Dashboards</option>
+                    <option value="integration">API Integration</option>
+                    <option value="hosting">Hosting Consultancy</option>
+                  </select>
+                </Field>
 
-              {/* Service */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-300">
-                  Service of Interest
-                </label>
-                <select
-                  value={form.service}
-                  onChange={(e) => setForm({ ...form, service: e.target.value })}
-                  className="w-full rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
+                <Field label="Message">
+                  <textarea
+                    value={form.message}
+                    onChange={(e) => setForm({ ...form, message: e.target.value })}
+                    placeholder="Tell us about your project..."
+                    rows={5}
+                    className="w-full resize-none rounded-lg border border-[#E7E5DF] bg-white px-4 py-3 text-[14px] text-[#16161A] placeholder-[#B8B8BE] outline-none transition-colors focus:border-[#2547E0]"
+                  />
+                </Field>
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={submitted}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#16161A] px-6 py-3.5 text-[14px] font-medium text-white transition-colors duration-200 hover:bg-[#2547E0] disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <option value="" className="bg-[#08080a] text-white">Select a service</option>
-                  <option value="web-app" className="bg-[#08080a] text-white">Web App Development</option>
-                  <option value="portal" className="bg-[#08080a] text-white">Client Portal</option>
-                  <option value="automation" className="bg-[#08080a] text-white">Business Automation</option>
-                  <option value="custom" className="bg-[#08080a] text-white">Custom Software</option>
-                  <option value="website" className="bg-[#08080a] text-white">Website Development</option>
-                  <option value="dashboard" className="bg-[#08080a] text-white">CRM & Dashboards</option>
-                  <option value="integration" className="bg-[#08080a] text-white">API Integration</option>
-                  <option value="hosting" className="bg-[#08080a] text-white">Hosting Consultancy</option>
-                </select>
+                  {submitted ? "Message sent — we'll be in touch soon." : "Send message"}
+                  {!submitted && <ArrowRight className="h-4 w-4" />}
+                </button>
               </div>
-
-              {/* Message */}
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-300">
-                  Message
-                </label>
-                <textarea
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder="Tell us about your project..."
-                  rows={5}
-                  className="w-full resize-none rounded-md border border-white/[0.1] bg-white/[0.05] px-4 py-3 text-white placeholder-zinc-600 transition-colors focus:border-blue-500/50 focus:bg-white/[0.08] focus:outline-none"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={submitted}
-                className="w-full rounded-md bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {submitted ? "Message Sent! We'll be in touch soon." : "Send Message"}
-              </button>
-            </form>
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ===================================================================
-          FOOTER
-          =================================================================== */}
-      <footer className="relative border-t border-white/[0.05] px-6 py-12">
-        <div className="mx-auto max-w-7xl text-center">
-          <Mono className="text-sm text-zinc-600">
-            © 2024 Durande. All rights reserved.
-          </Mono>
+      {/* ===================== FOOTER ===================== */}
+      <footer className="border-t border-[#E7E5DF] px-6 py-12 lg:px-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <div className="flex items-baseline gap-0.5">
+            <span className="text-[16px] font-semibold tracking-tight">Durande</span>
+            <span className="text-[16px] font-semibold tracking-tight text-[#2547E0]">.com</span>
+          </div>
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {navItems.map((it) => (
+              <button
+                key={it.id}
+                onClick={() => scrollTo(it.id)}
+                className="text-[13px] text-[#6C6C74] transition-colors hover:text-[#16161A]"
+              >
+                {it.label}
+              </button>
+            ))}
+          </div>
+          <span className="text-[12px] text-[#9A9AA0]" style={{ fontFamily: MONO }}>
+            © 2026 Durande
+          </span>
         </div>
       </footer>
+
+      {/* marquee keyframes */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Small local components                                                    */
+/* -------------------------------------------------------------------------- */
+function ManifestLine({ k, v, accent = false }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-[#B8B8BE]">{k}</span>
+      <span className={accent ? "text-[#2547E0]" : "text-[#16161A]"}>{v}</span>
+    </div>
+  );
+}
+
+function Field({ label, children }) {
+  return (
+    <div>
+      <label
+        className="mb-2 block text-[12px] font-medium uppercase tracking-[0.12em] text-[#6C6C74]"
+        style={{ fontFamily: MONO }}
+      >
+        {label}
+      </label>
+      {children}
     </div>
   );
 }
