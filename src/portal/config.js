@@ -25,8 +25,8 @@
 
 export const CLIENTS = [
   {
-    username: "asa",
-    password: "asa2025",
+    username: "ASAonline",
+    password: "Liverpool@1",
     name: "ASA Estates — Property Management App",
     source: "snapshot",
     snapshot: "estateapp.json", // served from /public/portal/estateapp.json
