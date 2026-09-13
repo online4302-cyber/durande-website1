@@ -15,6 +15,9 @@ import {
   Check,
   AlertTriangle,
   RefreshCw,
+  Code2,
+  Receipt,
+  Download,
 } from "lucide-react";
 import { getSession, logout } from "./auth";
 import useFonts from "./useFonts";
@@ -145,6 +148,12 @@ export default function ClientPortal() {
   // For snapshot sources: path -> file content, loaded once with the tree.
   const [snapshotMap, setSnapshotMap] = useState(null);
 
+  // Tabs: "code" (file tree) or "invoices".
+  const [tab, setTab] = useState("code");
+  const [invoices, setInvoices] = useState(null);
+  const [loadingInv, setLoadingInv] = useState(false);
+  const [invError, setInvError] = useState("");
+
   const [publishState, setPublishState] = useState("idle"); // idle|confirm|publishing|done|error
   const [publishMsg, setPublishMsg] = useState("");
 
@@ -211,6 +220,34 @@ export default function ClientPortal() {
   useEffect(() => {
     loadTree();
   }, [loadTree]);
+
+  // Load invoices once (filtered to this client by username).
+  const loadInvoices = useCallback(() => {
+    if (!session) return;
+    setLoadingInv(true);
+    setInvError("");
+    fetch(`/portal/invoices.json`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`Could not load invoices (${r.status}).`);
+        return r.json();
+      })
+      .then((data) => {
+        const mine = (data && data[session.username]) || [];
+        setInvoices(mine);
+        setLoadingInv(false);
+      })
+      .catch((e) => {
+        setInvError(e.message || "Failed to load invoices.");
+        setInvoices([]);
+        setLoadingInv(false);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (tab === "invoices" && invoices === null && !loadingInv) loadInvoices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab]);
 
   const selectFile = (node) => {
     setSelected(node);
@@ -368,7 +405,32 @@ export default function ClientPortal() {
         </div>
       )}
 
-      {/* Body */}
+      {/* Tab bar */}
+      <div className="flex items-center gap-1 border-b border-[#E7E5DF] bg-[#FBFBF9] px-4">
+        <button
+          onClick={() => setTab("code")}
+          className={`inline-flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-[13px] font-medium transition-colors ${
+            tab === "code"
+              ? "border-[#2547E0] text-[#16161A]"
+              : "border-transparent text-[#6C6C74] hover:text-[#16161A]"
+          }`}
+        >
+          <Code2 className="h-3.5 w-3.5" /> Code
+        </button>
+        <button
+          onClick={() => setTab("invoices")}
+          className={`inline-flex items-center gap-1.5 border-b-2 px-3 py-2.5 text-[13px] font-medium transition-colors ${
+            tab === "invoices"
+              ? "border-[#2547E0] text-[#16161A]"
+              : "border-transparent text-[#6C6C74] hover:text-[#16161A]"
+          }`}
+        >
+          <Receipt className="h-3.5 w-3.5" /> Invoices
+        </button>
+      </div>
+
+      {/* Code tab */}
+      {tab === "code" && (
       <div className="flex min-h-0 flex-1">
         {/* File tree */}
         <aside className="flex w-72 shrink-0 flex-col border-r border-[#E7E5DF] bg-white">
@@ -486,6 +548,125 @@ export default function ClientPortal() {
           )}
         </main>
       </div>
+      )}
+
+      {/* Invoices tab */}
+      {tab === "invoices" && (
+        <div className="min-h-0 flex-1 overflow-auto bg-[#FBFBF9] px-6 py-6">
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-5 flex items-center justify-between">
+              <h2
+                className="text-[26px] leading-none text-[#16161A]"
+                style={{ fontFamily: SERIF }}
+              >
+                Invoices
+              </h2>
+              <button
+                onClick={loadInvoices}
+                className="inline-flex items-center gap-1.5 text-[13px] text-[#6C6C74] transition-colors hover:text-[#16161A]"
+                title="Refresh"
+              >
+                <RefreshCw className="h-3.5 w-3.5" /> Refresh
+              </button>
+            </div>
+
+            {loadingInv && (
+              <div className="flex items-center gap-2 py-8 text-[13px] text-[#6C6C74]">
+                <Loader2 className="h-4 w-4 animate-spin" /> Loading invoices…
+              </div>
+            )}
+
+            {invError && (
+              <div className="rounded-lg border border-[#F3D6D6] bg-[#FCEBEB] px-4 py-3 text-[13px] text-[#B03535]">
+                {invError}
+              </div>
+            )}
+
+            {!loadingInv && !invError && invoices && invoices.length === 0 && (
+              <div className="rounded-xl border border-[#E7E5DF] bg-white px-6 py-12 text-center">
+                <span className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-[#EDF0FE]">
+                  <Receipt className="h-5 w-5 text-[#2547E0]" />
+                </span>
+                <p className="text-[14px] text-[#6C6C74]">
+                  No invoices yet. New invoices will appear here once generated.
+                </p>
+              </div>
+            )}
+
+            {!loadingInv && !invError && invoices && invoices.length > 0 && (
+              <div className="overflow-hidden rounded-xl border border-[#E7E5DF] bg-white">
+                <table className="w-full text-left text-[13px]">
+                  <thead>
+                    <tr className="border-b border-[#E7E5DF] bg-[#FBFBF9] text-[#6C6C74]">
+                      <th className="px-4 py-3 font-medium">Invoice</th>
+                      <th className="px-4 py-3 font-medium">Date</th>
+                      <th className="px-4 py-3 font-medium">Description</th>
+                      <th className="px-4 py-3 font-medium text-right">Amount</th>
+                      <th className="px-4 py-3 font-medium">Status</th>
+                      <th className="px-4 py-3 font-medium text-right">File</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoices.map((inv, i) => {
+                      const st = (inv.status || "").toLowerCase();
+                      const stColor =
+                        st === "paid"
+                          ? "bg-[#ECF7EF] text-[#2E7D46]"
+                          : st === "overdue"
+                          ? "bg-[#FCEBEB] text-[#B03535]"
+                          : "bg-[#FEF6E7] text-[#946200]";
+                      return (
+                        <tr
+                          key={inv.number || i}
+                          className="border-b border-[#F1F0EC] last:border-0 hover:bg-[#FAFAFE]"
+                        >
+                          <td
+                            className="px-4 py-3 text-[#16161A]"
+                            style={{ fontFamily: MONO }}
+                          >
+                            {inv.number || "—"}
+                          </td>
+                          <td className="px-4 py-3 text-[#6C6C74]">
+                            {inv.date || "—"}
+                          </td>
+                          <td className="px-4 py-3 text-[#16161A]">
+                            {inv.description || "—"}
+                          </td>
+                          <td className="px-4 py-3 text-right text-[#16161A]">
+                            {inv.amount || "—"}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-medium ${stColor}`}
+                            >
+                              {inv.status || "Pending"}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-right">
+                            {inv.url ? (
+                              <a
+                                href={inv.url}
+                                download
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-[#2547E0] hover:underline"
+                              >
+                                <Download className="h-3.5 w-3.5" /> PDF
+                              </a>
+                            ) : (
+                              <span className="text-[#B8B6AE]">—</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
