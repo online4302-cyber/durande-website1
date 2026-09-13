@@ -1,0 +1,14 @@
+{
+  "_note": "Invoices shown in the client portal, keyed by the client's login username. Edit arrays below to add/update invoices. 'url' links to a PDF placed in public/portal/. status: Paid | Pending | Overdue.",
+  "ASAonline": [
+    {
+      "number": "DUR-0006",
+      "date": "10 Aug 2026",
+      "description": "Database management & hosting (10 Apr – 10 Aug 2026), 25% discount applied",
+      "amount": "£320.00",
+      "status": "Pending",
+      "url": "/portal/DUR-0006.pdf"
+    }
+  ],
+  "online4302": []
+}
