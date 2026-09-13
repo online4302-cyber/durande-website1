@@ -142,6 +142,9 @@ export default function ClientPortal() {
   const [loadingFile, setLoadingFile] = useState(false);
   const [fileError, setFileError] = useState("");
 
+  // For snapshot sources: path -> file content, loaded once with the tree.
+  const [snapshotMap, setSnapshotMap] = useState(null);
+
   const [publishState, setPublishState] = useState("idle"); // idle|confirm|publishing|done|error
   const [publishMsg, setPublishMsg] = useState("");
 
@@ -154,6 +157,33 @@ export default function ClientPortal() {
     if (!session) return;
     setLoadingTree(true);
     setTreeError("");
+
+    // Snapshot source: read a bundled JSON of the whole codebase.
+    if (session.source === "snapshot") {
+      fetch(`/portal/${session.snapshot}`)
+        .then((r) => {
+          if (!r.ok) throw new Error(`Could not load project files (${r.status}).`);
+          return r.json();
+        })
+        .then((data) => {
+          const items = (data.files || []).map((f) => ({
+            path: f.path,
+            type: "blob",
+          }));
+          setTree(buildTree(items));
+          const map = {};
+          for (const f of data.files || []) map[f.path] = f.content;
+          setSnapshotMap(map);
+          setLoadingTree(false);
+        })
+        .catch((e) => {
+          setTreeError(e.message || "Failed to load files.");
+          setLoadingTree(false);
+        });
+      return;
+    }
+
+    // GitHub source: read the repo tree live via the API.
     fetch(
       `https://api.github.com/repos/${session.repo}/git/trees/${session.branch}?recursive=1`
     )
@@ -185,6 +215,20 @@ export default function ClientPortal() {
   const selectFile = (node) => {
     setSelected(node);
     setFileError("");
+
+    // Snapshot source: content is already in memory.
+    if (session.source === "snapshot") {
+      const c = snapshotMap ? snapshotMap[node.path] : undefined;
+      if (c === undefined) {
+        setContent("");
+        setFileError("This file isn't included in the snapshot.");
+      } else {
+        setContent(c);
+      }
+      setLoadingFile(false);
+      return;
+    }
+
     if (IMG_EXT.includes(ext(node.path)) && ext(node.path) !== "svg") {
       setContent("");
       return; // image handled in render
@@ -245,6 +289,7 @@ export default function ClientPortal() {
 
   const isImage =
     selected &&
+    session.source !== "snapshot" &&
     IMG_EXT.includes(ext(selected.path)) &&
     ext(selected.path) !== "svg";
 

@@ -10,8 +10,10 @@ export function login(username, password) {
   const session = {
     username: c.username,
     name: c.name,
+    source: c.source || "github",
     repo: c.repo,
     branch: c.branch,
+    snapshot: c.snapshot || "",
     deployHook: c.deployHook || "",
     ts: Date.now(),
   };
