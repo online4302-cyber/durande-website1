@@ -276,7 +276,13 @@ export default function DurandeWebsite() {
             ))}
           </div>
 
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-5 lg:flex">
+            <a
+              href="/portal/login"
+              className="text-[14px] text-[#6C6C74] transition-colors hover:text-[#16161A]"
+            >
+              Client login
+            </a>
             <Primary onClick={() => scrollTo("contact")} className="px-5 py-2.5 text-[13px]">
               Start a project
             </Primary>
@@ -303,6 +309,12 @@ export default function DurandeWebsite() {
                   {it.label}
                 </button>
               ))}
+              <a
+                href="/portal/login"
+                className="py-3 text-left text-[15px] text-[#16161A]"
+              >
+                Client login
+              </a>
               <Primary onClick={() => scrollTo("contact")} className="mt-3">
                 Start a project
               </Primary>
