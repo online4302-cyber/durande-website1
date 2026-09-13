@@ -258,9 +258,10 @@ export default function ClientPortal() {
 
   const doPublish = () => {
     if (!session.deployHook) {
-      setPublishState("error");
+      // No deploy hook: treat Publish as a request for Durande to review.
+      setPublishState("done");
       setPublishMsg(
-        "Publishing isn't configured yet. Ask Durande to add a deploy hook."
+        "Thanks — your request has been submitted. We'll review it and update shortly."
       );
       return;
     }
